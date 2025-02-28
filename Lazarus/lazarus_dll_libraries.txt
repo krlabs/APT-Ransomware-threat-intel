@@ -1,0 +1,23 @@
+Список DLL, які використовує Lazarus Group
+--------------------------------------------
+
+Missing DLL:
+spoolsv.exe ➡️ ualapi.dll
+
+Side-loaded:
+mobsync.exe ➡️ propsys.dll
+MDEServer.exe ➡️ winmde.dll
+ComcastVNC.exe ➡️ version.dll
+colorcpl.exe ➡️ colorui.dll
+presentationhost.exe ➡️ mscoree.dll
+CameraSettingsUIHost.exe ➡️ DUI70.dll
+wsmprovhost.exe ➡️ mi.dll
+SgrmLpac.exe ➡️ winhttp.dll
+TieringEngineService.exe ➡️ ESENT.dll
+WmiApSrv.exe ➡️ wbemcomn.dll
+dfrgui.exe ➡️ SXSHARED.dll
+SyncHost.exe ➡️ WinSync.dll
+wmiprvse.exe ➡️ ncobjapi.dll
+wmiprvse.exe ➡️ wbem\sspicli.dll
+wmiprvse.exe ➡️ wbem\wmiclnt.dll
+svchost.exe(IKEEXT) ➡️ wlbsctrl.dll
