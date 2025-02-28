@@ -1,0 +1,14 @@
+Metasploit (MSFVenom, Meterpreter)
+Armitage
+CobaltStrike
+PowerShell
+Shodan
+Censys
+ZoomEye
+Fofa
+Nuclei
+ChatGPT
+GitHub
+AvCheck
+Google Dorks
+SoftEther VPN
