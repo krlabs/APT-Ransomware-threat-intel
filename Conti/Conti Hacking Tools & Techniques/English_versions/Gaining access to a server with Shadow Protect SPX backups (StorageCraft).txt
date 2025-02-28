@@ -1,0 +1,36 @@
+Gaining access to a server with Shadow Protect SPX backups (StorageCraft)
+==
+1. Connect to one of the servers via RDP, in my case this is SQL server. 
+2. You will see ShadowProtect SPX icon on desktop
+   -> click on it
+3. gui will start (if it asks for credentials, enter the credentials under which you logged in using the rdp, or any other Database Admin credentials you might have)
+4. On the left in the "Job Summary" block you will see a detailed description of the backup scheme
+   in the "Name" field - the name of the backup of our server
+   in the "Destination" field - the place WHERE our spx saves the backups, in the form of the SERVER_NAME (NETWORK SHARE WITH BACKUP ON THIS SERVER)
+      from our example we can conclude that all backups are saved in a network share named StorageCraft, and the folders with backups of servers are named by the name of the server itself.
+5. Knowing the name of the backup server, we want to get a better idea of its structure, the first thing we do is to get the network shares with "cmd.exe> net view \\\COH-DSS3 /ALL", in response we get "Error 5: Access Denied"
+6. No access, trying to check other accounts, YES - the answer is the same - error n 5, it would be logical to assume that to gain access to the server we need either the credentials of the local admin on this server, or the account of a special user with special privileges
+7. Suppose that if it is a dedicated user, then he has a similar name to the software/function:
+   we go through the logins with substring entries (use your imagination):
+      Storage
+      Shadow
+      Protect
+      Craft
+      SP
+      SPX
+      Backup
+      BUUser
+      И Т.Д.
+   Then do a search on ntds.dit (hashes.txt.ntds) to find the hash, in my case, the search was successful and I found the user Humanity.local\SPAdmin (I think it is clear that it is Shadow Protect Admin) and its hash ce31b806821bec116ba03132ab5b3138, but unfortunately the search on cmd5.org gave no results and I need the clear password. (If you have hash already, congratulations - you got the result)
+8. But if you still need clear pasword or you could not find a suitable user, we understand that if the software somehow knocked on the server, software knows the credentials, which means credentials could be stored on the server.
+   Try to use hash dump
+   I will not describe in detail how to do it, but you should try hashdump (and its analogues) and logonpasswords (and analogues)
+   In my case I used mimicatz and dumped lsass, where I found the kerber pass from my SPAdmin account - kerberos:
+         * Username : SPAdmin
+         * Domain   : COHBackup
+         * Password : Backup!User
+    (In my case, for some reason the domain was not humanity.local but COHBackup, although you can also try with humanity.local(replace with your own value))
+9. Go to explorer, and through it open the necessary network share "\\COH-DSS3\StorageCraft" I was asked for credentials, I entered COHBackup\SPAdmin and Backup!User and successfully get access
+10. Also in some networks there may be several backup servers, as an option to check this, is to click on the button Backup in the upper left corner of the GUI (just after File menu) then Destinations -> and we will see used backup copies destinations
+===
+

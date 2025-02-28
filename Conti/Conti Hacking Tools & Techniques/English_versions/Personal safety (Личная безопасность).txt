@@ -1,0 +1,8 @@
+I think everyone here works via VM. That's why I'll advise you installing VM on encrypted partition using VeraCrypt.
+1 Downloading Veracrypt
+2 Allocate space for file / full disk encryption 
+Important rule. New VM will be required because encryption of the old one will return an error and it won't start. Not a big deal since you can get all your files from VM image using 7ZIP.
+
+Don't forget to save passwords to enter this chat or Tokyo's jabber because nobody will help restoring them.
+
+(If somebody will be able to find a way to set it up without fresh VM install, please let me know so I can edit this)

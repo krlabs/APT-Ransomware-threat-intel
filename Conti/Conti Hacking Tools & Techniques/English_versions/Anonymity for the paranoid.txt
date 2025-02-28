@@ -1,0 +1,9 @@
+A couple of notes regarding posts about anonymity for the paranoid:
+
+1. The task is not to hide (it still won't work), but to merge with the crowd. So by turning off  webrtc, Javascript, Flash etc. you will only attract more attention to yourself. Need to NOT TURN OFF, BUT TO ALTER anything that allows you to be be discovered.
+
+2. Concerning Kali and other hacker operating systems. Now there is a group of people (Hackers) that need to be tracked. 
+Technically, this problem is difficult to solve. It's easier to play on human emotions (laziness) and gather everyone together by providing a properly advertised, convenient, ready-made and popular solution. I think the point is understood. 
+I advise you to use Debian or build something of your own.
+
+Saint thanks for the material, added NetScan into the algorithm

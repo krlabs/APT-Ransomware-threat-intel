@@ -1,0 +1,11 @@
+I suggest you make your working station to work through Tor network unless you haven't done that already.
+Далее (для тех кто еще это не сделал) я предлагаю перевести всю рабочую станцую на работу через Tor сеть.
+ 
+To do so you have to set up your OS and Whonix (it is an OS that creates "safe Tor tunnel" (read more about it, in 90% of cases it will be Kali). Here's the instruction: 
+
+https://defcon.ru/penetration-testing/405/
+
+After those steps I got a problem - Tor over Tor even though I followed instructions. Here's the solution which helped me:
+https://www.whonix.org/wiki/Other_Operating_Systems#Configure_Tor_Browser_Settings
+
+Click on Expand on the right

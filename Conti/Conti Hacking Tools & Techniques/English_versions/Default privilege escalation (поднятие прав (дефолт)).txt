@@ -1,0 +1,6 @@
+Default privilege escalation.
+If a bot returned blue screen, check user privilages (shell whoami /groups)
+If we have admin privilages (BULTIN\Administrators) rightclick on bot -> access -> elevate
+Next:
+svc-exe ( Start a new session on bot as a service not a process, session will return a red screen )
+uac-token-dubl ( start a new session from a current user but with red screen )

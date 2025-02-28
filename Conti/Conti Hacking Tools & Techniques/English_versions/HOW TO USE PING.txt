@@ -1,0 +1,18 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ HOW TO USE PING +++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+1. CREATE A TXT FILE ON THE DESKTOP WITH THE NAME domains.txt
+2. IF YOU HAVE SORTED OR JUST LOCAL COMPUTER NAMES, PUT THEM IN THIS FILE
+3. UPLOAD TO A PC FROM WHICH YOU WILL SEND PING (C:\ProgramData\) FILE domains.txt and p.bat
+4. RUN p.bat WITH shell COMMAND
+5. AFTER DOWNLOAD FILE res.txt
+
+----------------------------------- HOW TO QUICKLY GET A CLEAN IP FROM MACHINES WHICH REPLIED TO PING REQUESTS ----------------------------------
+1. YOU HAVE FILE res.txt, OPEN IT IN NOTEPAD++
+2. USE CTRL+F ENTER TTL TO SEARCH STRING
+3. PUSH FIND ALL IN CURRENT DOCUMENT YOU WILL SEE A WINDOW WITH THE IP AT THE BOTTOM 
+4. VISIT SITE en.toolpage.org/tool/ipv4-extractor THERE WE PASTE EVERYTHING WE GET AND GET SORTED IPS
+
+
+                                             A SITE FOR BRUTE-FORCE SIMPLE HASHES
+
+----------->    hashes.com
+=================================================================================================================================

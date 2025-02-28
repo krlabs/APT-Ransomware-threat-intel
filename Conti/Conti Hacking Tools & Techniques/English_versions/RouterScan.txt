@@ -1,0 +1,8 @@
+Windows software which allows routers/cameras/NAS (depending on auth type) bruteforce if web interface is available. 
+Tries to detect which kind of device it is then applies corresponding exploits (even hacks Mikrotik in a second if firmware is below v. 6.12 and provides plaintext passwords) 
+If there are no exploits found for specific model it tries to bruteforce. Upload dictionaries in 3 text files starting with auth_***.txt to program root if needed.  
+Format: 
+login password 
+login password 
+Separated with Tab not spaces 
+Use SOCKS on Cobalt Strike server, proxy via ProxyFier, and run on your Windows, set IP address or ranges and number of threads (5 should be perfect) and timeout (preferably bump it to 3000ms if don’t wanna miss). Default ports are already set but can be modified if web is set to different. Check first (Router scan main) and HNAP 1.0, others won’t be necessary, uncheck. Press start, wait and hope for result. 
